@@ -6,4 +6,3 @@ require:
     - play -> secure
     - play -> table 1.2
     - play -> linkedin 0.2.1
-    - play -> cloudbees 0.2.2
