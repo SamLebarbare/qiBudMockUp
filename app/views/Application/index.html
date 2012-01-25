@@ -1,0 +1,660 @@
+#{extends 'main.html' /}
+#{set title:'Qibud' /}
+#{if flash.success}
+    <div class="alert-message success">
+    <a class="close" href="#">×</a>
+    <p><strong>Bien joué!</strong> ${flash.success}</p>
+    </div>
+#{/if}
+#{if flash.error}
+    <div class="alert-message error">
+    <a class="close" href="#">×</a>
+    <p><strong>Oops =/</strong> ${flash.error}</p>
+    </div>
+#{/if}
+#{if budCount < 5}
+<!-- Main hero unit for a primary marketing message or call to action -->
+        <div class="hero-unit">
+          <h1>Toute histoire a un début !</h1>
+          <p>Une idée? Un projet? Une mission? Une simple information ?</p>
+          <p><a class="btn primary large" href="@{Application.bud()}">créer un bud »</a></p>
+        </div>
+#{/if}
+       <script>
+  $(function () {
+    $('.tabs').tabs()
+  })
+</script>
+<div class="page-header">
+    <ul class="tabs" data-tabs="tabs">
+        <li class="active dropdown" data-dropdown="dropdown">
+            <a href="#lastbud" class="dropdown-toggle">Last buds</a>
+            <ul class="dropdown-menu">
+                <li class=""><a href="#lastbud">Tous les types</a></li>
+                <li class=""><a href="#bud">bud</a></li>
+                <li class=""><a href="#bug">bug</a></li>
+                <li class=""><a href="#action">action</a></li>
+                <li class=""><a href="#idea">idée</a></li>
+                <li class=""><a href="#mission">mission</a></li>
+                <li class=""><a href="#project">projet</a></li>
+                <li class=""><a href="#result">resultat</a></li>
+                <li class=""><a href="#choice">choix</a></li>
+                <li class=""><a href="#result">resultat</a></li>
+                <li class=""><a href="#team">team</a></li>
+              </ul>
+        </li>
+        <li><a href="#mybuds">Mes buds</a></li>  
+        <li><a href="#teams">Teams</a></li>
+        <li><a href="#myprojects">Mes projets</a></li> 
+        <li><a href="#mymissions">Mes missions</a></li> 
+        <li><a href="#myactions">Mes actions</a></li> 
+        <li><a href="#freeaction">Actions libres</a></li>   
+      </ul> 
+</div>
+<div class="tab-content" id="my-tab-content">
+        <div class="tab-pane" id="teams">
+        <div class="row"> 
+        #{list items:teams, as:'t'}
+            <div class="span15">
+                <h6>${t.origin.budTitle}</h6>
+             <div id="chart-${t_index}" class="well"></div>
+             <script type="text/javascript">
+
+                //.event("click", function(d) self.location = "show?id="+d.id);
+
+             var w = 900,
+                  h = 100;
+                  fill = d3.scale.category20();
+
+              var vis${t_index} = d3.select("#chart-${t_index}").append("svg:svg")
+                  .attr("width", w)
+                  .attr("height", h);
+             d3.json("@{Application.miniGraphJSON(t.origin.id)}", function(json) { 
+               var force = d3.layout.force()
+                   .charge(-120)
+                   .linkDistance(30)
+                   .nodes(json.nodes)
+                   .links(json.links)
+                   .size([w, h])
+                   .start();
+
+               var link = vis${t_index}.selectAll("line.link")
+                   .data(json.links)
+                   .enter().append("svg:line")
+                   .style("stroke","black")
+                   .attr("x1", function(d) { return d.source.x; })
+                   .attr("y1", function(d) { return d.source.y; })
+                   .attr("x2", function(d) { return d.target.x; })
+                   .attr("y2", function(d) { return d.target.y; });
+
+               var node = vis${t_index}.selectAll("circle.node")
+                   .data(json.nodes)
+                 .enter().append("svg:circle")
+                   .attr("cx", function(d) { return d.x; })
+                   .attr("cy", function(d) { return d.y; })
+                   .attr("r", 8)
+                   .attr("rel","popover")
+                   .attr("data-content",function(d) { return d.content; })
+                   .attr("data-original-title",function(d) { return d.nodeName; })
+                   .style("fill", function(d) { return fill(d.group); })
+                   .call(force.drag);
+
+
+               node.on("click",function(d) { self.location = "show?id="+d.id; });
+
+               force.on("tick", function() {
+                 link.attr("x1", function(d) { return d.source.x; })
+                     .attr("y1", function(d) { return d.source.y; })
+                     .attr("x2", function(d) { return d.target.x; })
+                     .attr("y2", function(d) { return d.target.y; });
+
+                 node.attr("cx", function(d) { return d.x; })
+                     .attr("cy", function(d) { return d.y; });
+
+
+                });   
+
+             });   
+             
+             </script>
+             
+            </div>
+            #{/list}
+             <script type="text/javascript">
+            $(function () {
+              $("circle[rel=popover]")
+                .popover({
+                  live: true,
+                  animate: false,
+                  html: true,
+                  placement: "above"
+                })
+                
+            })
+          </script>
+          </div>
+        </div>
+          <div class="active tab-pane" id="lastbud">
+              <ul class="breadcrumb">
+                <p>Affiche <span id="range">${nbresult}</span> derniers:</p><input name="nbevent" type="range"  min="5" max="100" step="5" value="${nbresult}" onchange="changeValue(this.value)"/> 
+
+                <script type="text/javascript">
+
+
+                function changeValue(newValue)
+                {
+                        self.location = "index?nbresult=" + newValue;
+
+
+                }
+                </script>
+            </ul>
+          <div class="row"> 
+          #{list items:events, as:'e'}
+
+            %{
+                        Date now = new Date();
+                        long l1 = now.getTime();
+                        long l2 = e.at.getTime();
+                        long diff = l1 - l2;
+                        long secondInMillis = 1000;
+                        long minuteInMillis = secondInMillis * 60;
+                        long hourInMillis = minuteInMillis * 60;
+                        long dayInMillis = hourInMillis * 24;
+                        long yearInMillis = dayInMillis * 365;
+                        long elapsedYears = diff / yearInMillis;
+                        diff = diff % yearInMillis;
+                        long elapsedDays = diff / dayInMillis;
+                        diff = diff % dayInMillis;
+                        long elapsedHours = diff / hourInMillis;
+                        diff = diff % hourInMillis;
+                        long elapsedMinutes = diff / minuteInMillis;
+                        diff = diff % minuteInMillis;
+                        long elapsedSeconds = diff / secondInMillis;
+            %}                        
+            <div class="span15">
+            <div class="well">
+            <h4>#{if e.on.isAction}
+            <span class="label">Action</span>
+            #{/if}
+            #{if e.on.isIdea}
+            <span class="label">Idée</span>
+            #{/if}
+            #{if e.on.isProject}
+            <span class="label">Projet</span>
+            #{/if}
+            #{if e.on.isMission}
+            <span class="label">Mission</span>
+            #{/if}
+            #{if e.on.isResult}
+            <span class="label">Résultat</span>
+            #{/if}
+            #{if e.on.isBug}
+            <span class="label">Bug</span>
+            #{/if}
+            #{if e.on.isChoice}
+            <span class="label">Choix</span>
+            #{/if}
+            #{if e.on.isATeam}
+            <span class="label">Team</span>
+            #{/if}
+            #{if e.on.isASimpleBud }
+            <span class="label">Bud</span>
+            #{/if}        
+                #{if e.type=="comment"}
+                ${e.who.fullname}:
+                #{/if}
+                ${e.what}</h4><p>il y a #{if elapsedYears > 0}${elapsedYears}an#{/if}#{if elapsedDays > 0}${elapsedDays}jour/s #{/if}#{if elapsedHours > 0}${elapsedHours}h#{/if}#{if elapsedMinutes > 0}${elapsedMinutes} min #{/if}#{if elapsedMinutes < 1}${elapsedSeconds} sec#{/if}<a class="label" href="#{if e.on}@{Application.show(e.on.id)}#{/if}#{else}##{/else}">Voir ce bud »</a></p>
+            </div>
+            </div>
+            
+        #{/list}    
+        </div>
+        </div>
+        <div class="tab-pane" id="action">
+          #{list items:evActions, as:'e'}
+
+            %{
+                        Date now = new Date();
+                        long l1 = now.getTime();
+                        long l2 = e.at.getTime();
+                        long diff = l1 - l2;
+                        long secondInMillis = 1000;
+                        long minuteInMillis = secondInMillis * 60;
+                        long hourInMillis = minuteInMillis * 60;
+                        long dayInMillis = hourInMillis * 24;
+                        long yearInMillis = dayInMillis * 365;
+                        long elapsedYears = diff / yearInMillis;
+                        diff = diff % yearInMillis;
+                        long elapsedDays = diff / dayInMillis;
+                        diff = diff % dayInMillis;
+                        long elapsedHours = diff / hourInMillis;
+                        diff = diff % hourInMillis;
+                        long elapsedMinutes = diff / minuteInMillis;
+                        diff = diff % minuteInMillis;
+                        long elapsedSeconds = diff / secondInMillis;
+            %}     
+            <div class="row"> 
+            <div class="span15">
+            <div class="well">
+            <h4>
+            <span class="label">Action</span>
+            
+                #{if e.type=="comment"}
+                ${e.who.fullname}:
+                #{/if}
+                ${e.what}</h4><p>il y a #{if elapsedYears > 0}${elapsedYears}an#{/if}#{if elapsedDays > 0}${elapsedDays}jour/s #{/if}#{if elapsedHours > 0}${elapsedHours}h#{/if}#{if elapsedMinutes > 0}${elapsedMinutes} min #{/if}#{if elapsedMinutes < 1}${elapsedSeconds} sec#{/if}<a class="label" href="#{if e.on}@{Application.show(e.on.id)}#{/if}#{else}##{/else}">Voir ce bud »</a></p>
+            </div>
+            </div>
+            </div>
+            
+        #{/list}    
+        </div>
+    <div class="tab-pane" id="idea">
+          #{list items:evIdeas, as:'e'}
+
+            %{
+                        Date now = new Date();
+                        long l1 = now.getTime();
+                        long l2 = e.at.getTime();
+                        long diff = l1 - l2;
+                        long secondInMillis = 1000;
+                        long minuteInMillis = secondInMillis * 60;
+                        long hourInMillis = minuteInMillis * 60;
+                        long dayInMillis = hourInMillis * 24;
+                        long yearInMillis = dayInMillis * 365;
+                        long elapsedYears = diff / yearInMillis;
+                        diff = diff % yearInMillis;
+                        long elapsedDays = diff / dayInMillis;
+                        diff = diff % dayInMillis;
+                        long elapsedHours = diff / hourInMillis;
+                        diff = diff % hourInMillis;
+                        long elapsedMinutes = diff / minuteInMillis;
+                        diff = diff % minuteInMillis;
+                        long elapsedSeconds = diff / secondInMillis;
+            %}     
+            <div class="row"> 
+            <div class="span15">
+            <div class="well">
+            <h4>
+            <span class="label">Idea</span>
+            
+                #{if e.type=="comment"}
+                ${e.who.fullname}:
+                #{/if}
+                ${e.what}</h4><p>il y a #{if elapsedYears > 0}${elapsedYears}an#{/if}#{if elapsedDays > 0}${elapsedDays}jour/s #{/if}#{if elapsedHours > 0}${elapsedHours}h#{/if}#{if elapsedMinutes > 0}${elapsedMinutes} min #{/if}#{if elapsedMinutes < 1}${elapsedSeconds} sec#{/if}<a class="label" href="#{if e.on}@{Application.show(e.on.id)}#{/if}#{else}##{/else}">Voir ce bud »</a></p>
+            </div>
+            </div>
+            </div>
+            
+        #{/list}    
+        </div>
+    <div class="tab-pane" id="bug">
+          #{list items:evBugs, as:'e'}
+
+            %{
+                        Date now = new Date();
+                        long l1 = now.getTime();
+                        long l2 = e.at.getTime();
+                        long diff = l1 - l2;
+                        long secondInMillis = 1000;
+                        long minuteInMillis = secondInMillis * 60;
+                        long hourInMillis = minuteInMillis * 60;
+                        long dayInMillis = hourInMillis * 24;
+                        long yearInMillis = dayInMillis * 365;
+                        long elapsedYears = diff / yearInMillis;
+                        diff = diff % yearInMillis;
+                        long elapsedDays = diff / dayInMillis;
+                        diff = diff % dayInMillis;
+                        long elapsedHours = diff / hourInMillis;
+                        diff = diff % hourInMillis;
+                        long elapsedMinutes = diff / minuteInMillis;
+                        diff = diff % minuteInMillis;
+                        long elapsedSeconds = diff / secondInMillis;
+            %}     
+            <div class="row"> 
+            <div class="span15">
+            <div class="well">
+            <h4>
+            <span class="label">Bug</span>
+            
+                #{if e.type=="comment"}
+                ${e.who.fullname}:
+                #{/if}
+                ${e.what}</h4><p>il y a #{if elapsedYears > 0}${elapsedYears}an#{/if}#{if elapsedDays > 0}${elapsedDays}jour/s #{/if}#{if elapsedHours > 0}${elapsedHours}h#{/if}#{if elapsedMinutes > 0}${elapsedMinutes} min #{/if}#{if elapsedMinutes < 1}${elapsedSeconds} sec#{/if}<a class="label" href="#{if e.on}@{Application.show(e.on.id)}#{/if}#{else}##{/else}">Voir ce bud »</a></p>
+            </div>
+            </div>
+            </div>
+            
+        #{/list}    
+        </div>
+    <div class="tab-pane" id="bud">
+          #{list items:evBuds, as:'e'}
+
+            %{
+                        Date now = new Date();
+                        long l1 = now.getTime();
+                        long l2 = e.at.getTime();
+                        long diff = l1 - l2;
+                        long secondInMillis = 1000;
+                        long minuteInMillis = secondInMillis * 60;
+                        long hourInMillis = minuteInMillis * 60;
+                        long dayInMillis = hourInMillis * 24;
+                        long yearInMillis = dayInMillis * 365;
+                        long elapsedYears = diff / yearInMillis;
+                        diff = diff % yearInMillis;
+                        long elapsedDays = diff / dayInMillis;
+                        diff = diff % dayInMillis;
+                        long elapsedHours = diff / hourInMillis;
+                        diff = diff % hourInMillis;
+                        long elapsedMinutes = diff / minuteInMillis;
+                        diff = diff % minuteInMillis;
+                        long elapsedSeconds = diff / secondInMillis;
+            %}     
+            <div class="row"> 
+            <div class="span15">
+            <div class="well">
+            <h4>
+            <span class="label">Bud</span>
+            
+                #{if e.type=="comment"}
+                ${e.who.fullname}:
+                #{/if}
+                ${e.what}</h4><p>il y a #{if elapsedYears > 0}${elapsedYears}an#{/if}#{if elapsedDays > 0}${elapsedDays}jour/s #{/if}#{if elapsedHours > 0}${elapsedHours}h#{/if}#{if elapsedMinutes > 0}${elapsedMinutes} min #{/if}#{if elapsedMinutes < 1}${elapsedSeconds} sec#{/if}<a class="label" href="#{if e.on}@{Application.show(e.on.id)}#{/if}#{else}##{/else}">Voir ce bud »</a></p>
+            </div>
+            </div>
+            </div>
+            
+        #{/list}    
+        </div>
+    <div class="tab-pane" id="team">
+          #{list items:evTeams, as:'e'}
+
+            %{
+                        Date now = new Date();
+                        long l1 = now.getTime();
+                        long l2 = e.at.getTime();
+                        long diff = l1 - l2;
+                        long secondInMillis = 1000;
+                        long minuteInMillis = secondInMillis * 60;
+                        long hourInMillis = minuteInMillis * 60;
+                        long dayInMillis = hourInMillis * 24;
+                        long yearInMillis = dayInMillis * 365;
+                        long elapsedYears = diff / yearInMillis;
+                        diff = diff % yearInMillis;
+                        long elapsedDays = diff / dayInMillis;
+                        diff = diff % dayInMillis;
+                        long elapsedHours = diff / hourInMillis;
+                        diff = diff % hourInMillis;
+                        long elapsedMinutes = diff / minuteInMillis;
+                        diff = diff % minuteInMillis;
+                        long elapsedSeconds = diff / secondInMillis;
+            %}     
+            <div class="row"> 
+            <div class="span15">
+            <div class="well">
+            <h4>
+            <span class="label">Team</span>
+            
+                #{if e.type=="comment"}
+                ${e.who.fullname}:
+                #{/if}
+                ${e.what}</h4><p>il y a #{if elapsedYears > 0}${elapsedYears}an#{/if}#{if elapsedDays > 0}${elapsedDays}jour/s #{/if}#{if elapsedHours > 0}${elapsedHours}h#{/if}#{if elapsedMinutes > 0}${elapsedMinutes} min #{/if}#{if elapsedMinutes < 1}${elapsedSeconds} sec#{/if}<a class="label" href="#{if e.on}@{Application.show(e.on.id)}#{/if}#{else}##{/else}">Voir ce bud »</a></p>
+            </div>
+            </div>
+            </div>
+            
+        #{/list}    
+        </div>
+    
+        <div class="tab-pane" id="mission">
+          #{list items:evMissions, as:'e'}
+
+            %{
+                        Date now = new Date();
+                        long l1 = now.getTime();
+                        long l2 = e.at.getTime();
+                        long diff = l1 - l2;
+                        long secondInMillis = 1000;
+                        long minuteInMillis = secondInMillis * 60;
+                        long hourInMillis = minuteInMillis * 60;
+                        long dayInMillis = hourInMillis * 24;
+                        long yearInMillis = dayInMillis * 365;
+                        long elapsedYears = diff / yearInMillis;
+                        diff = diff % yearInMillis;
+                        long elapsedDays = diff / dayInMillis;
+                        diff = diff % dayInMillis;
+                        long elapsedHours = diff / hourInMillis;
+                        diff = diff % hourInMillis;
+                        long elapsedMinutes = diff / minuteInMillis;
+                        diff = diff % minuteInMillis;
+                        long elapsedSeconds = diff / secondInMillis;
+            %}     
+            <div class="row"> 
+            <div class="span15">
+            <div class="well">
+            <h4>
+            <span class="label">Mission</span>
+            
+                #{if e.type=="comment"}
+                ${e.who.fullname}:
+                #{/if}
+                ${e.what}</h4><p>il y a #{if elapsedYears > 0}${elapsedYears}an#{/if}#{if elapsedDays > 0}${elapsedDays}jour/s #{/if}#{if elapsedHours > 0}${elapsedHours}h#{/if}#{if elapsedMinutes > 0}${elapsedMinutes} min #{/if}#{if elapsedMinutes < 1}${elapsedSeconds} sec#{/if}<a class="label" href="#{if e.on}@{Application.show(e.on.id)}#{/if}#{else}##{/else}">Voir ce bud »</a></p>
+            </div>
+            </div>
+            </div>
+            
+        #{/list}    
+        </div>
+    <div class="tab-pane" id="projet">
+          #{list items:evProjects, as:'e'}
+
+            %{
+                        Date now = new Date();
+                        long l1 = now.getTime();
+                        long l2 = e.at.getTime();
+                        long diff = l1 - l2;
+                        long secondInMillis = 1000;
+                        long minuteInMillis = secondInMillis * 60;
+                        long hourInMillis = minuteInMillis * 60;
+                        long dayInMillis = hourInMillis * 24;
+                        long yearInMillis = dayInMillis * 365;
+                        long elapsedYears = diff / yearInMillis;
+                        diff = diff % yearInMillis;
+                        long elapsedDays = diff / dayInMillis;
+                        diff = diff % dayInMillis;
+                        long elapsedHours = diff / hourInMillis;
+                        diff = diff % hourInMillis;
+                        long elapsedMinutes = diff / minuteInMillis;
+                        diff = diff % minuteInMillis;
+                        long elapsedSeconds = diff / secondInMillis;
+            %}     
+            <div class="row"> 
+            <div class="span15">
+            <div class="well">
+            <h4>
+            <span class="label">projet</span>
+            
+                #{if e.type=="comment"}
+                ${e.who.fullname}:
+                #{/if}
+                ${e.what}</h4><p>il y a #{if elapsedYears > 0}${elapsedYears}an#{/if}#{if elapsedDays > 0}${elapsedDays}jour/s #{/if}#{if elapsedHours > 0}${elapsedHours}h#{/if}#{if elapsedMinutes > 0}${elapsedMinutes} min #{/if}#{if elapsedMinutes < 1}${elapsedSeconds} sec#{/if}<a class="label" href="#{if e.on}@{Application.show(e.on.id)}#{/if}#{else}##{/else}">Voir ce bud »</a></p>
+            </div>
+            </div>
+            </div>
+            
+        #{/list}    
+        </div>
+    <div class="tab-pane" id="result">
+          #{list items:evResults, as:'e'}
+
+            %{
+                        Date now = new Date();
+                        long l1 = now.getTime();
+                        long l2 = e.at.getTime();
+                        long diff = l1 - l2;
+                        long secondInMillis = 1000;
+                        long minuteInMillis = secondInMillis * 60;
+                        long hourInMillis = minuteInMillis * 60;
+                        long dayInMillis = hourInMillis * 24;
+                        long yearInMillis = dayInMillis * 365;
+                        long elapsedYears = diff / yearInMillis;
+                        diff = diff % yearInMillis;
+                        long elapsedDays = diff / dayInMillis;
+                        diff = diff % dayInMillis;
+                        long elapsedHours = diff / hourInMillis;
+                        diff = diff % hourInMillis;
+                        long elapsedMinutes = diff / minuteInMillis;
+                        diff = diff % minuteInMillis;
+                        long elapsedSeconds = diff / secondInMillis;
+            %}     
+            <div class="row"> 
+            <div class="span15">
+            <div class="well">
+            <h4>
+            <span class="label">resultat</span>
+            
+                #{if e.type=="comment"}
+                ${e.who.fullname}:
+                #{/if}
+                ${e.what}</h4><p>il y a #{if elapsedYears > 0}${elapsedYears}an#{/if}#{if elapsedDays > 0}${elapsedDays}jour/s #{/if}#{if elapsedHours > 0}${elapsedHours}h#{/if}#{if elapsedMinutes > 0}${elapsedMinutes} min #{/if}#{if elapsedMinutes < 1}${elapsedSeconds} sec#{/if}<a class="label" href="#{if e.on}@{Application.show(e.on.id)}#{/if}#{else}##{/else}">Voir ce bud »</a></p> 
+            </div>
+            </div>
+            </div>
+            
+        #{/list}    
+        </div>
+    <div class="tab-pane" id="myprojects">
+          <div class="row"> 
+          #{list items:myProjects, as:'e'}
+          <div class="span15">
+              <div class="well">
+              <h4>${e.origin.budTitle}</h4>
+              <p>${e.origin.content.raw()}<a class="label" href="@{Application.show(e.origin.id)}"> Voir ce bud »</a></p>                        
+          </div>
+          </div>      
+        #{/list}    
+        </div>
+        </div>
+    <div class="tab-pane" id="mymissions">
+          <div class="row"> 
+          #{list items:myMissions, as:'e'}
+          <div class="span15">
+              <div class="well">
+              <h4>${e.origin.budTitle}</h4>
+              <p>${e.origin.content.raw()}<a class="label" href="@{Application.show(e.origin.id)}"> Voir ce bud »</a></p>                        
+          </div>
+          </div>      
+        #{/list}    
+        </div>
+        </div>
+    
+        <div class="tab-pane" id="freeaction">
+          <div class="row"> 
+          #{list items:freeActions, as:'e'}
+          <div class="span15">
+              <div class="well">
+              <h4>${e.origin.budTitle}<a class="label" href="@{Application.show(e.origin.id)}"> Voir ce bud »</a></h4>
+              <p>${e.origin.content.raw()}<a class="btn small" href="@{Application.takeAction(e.origin.id)}">Accepter</a></p>                        
+          </div>
+          </div>      
+        #{/list}    
+        </div>
+        </div>
+    
+    <div class="tab-pane" id="myactions">
+          <div class="row"> 
+          #{list items:myActions, as:'e'}
+          <div class="span15">
+              <div class="well">
+              <h4>${e.origin.budTitle}</h4>
+              <p>${e.origin.content.raw()}<a class="label" href="@{Application.show(e.origin.id)}"> Voir ce bud »</a></p>                        
+          </div>
+          </div>      
+        #{/list}    
+        </div>
+        </div>
+    
+    
+    
+        <div class="tab-pane" id="mybuds">
+          <div class="row"> 
+              
+          #{list items:myBuds, as:'e'}
+          %{
+                        Date now = new Date();
+                        long l1 = now.getTime();
+                        long l2 = e.createdAt.getTime();
+                        long diff = l1 - l2;
+                        long secondInMillis = 1000;
+                        long minuteInMillis = secondInMillis * 60;
+                        long hourInMillis = minuteInMillis * 60;
+                        long dayInMillis = hourInMillis * 24;
+                        long yearInMillis = dayInMillis * 365;
+                        long elapsedYears = diff / yearInMillis;
+                        diff = diff % yearInMillis;
+                        long elapsedDays = diff / dayInMillis;
+                        diff = diff % dayInMillis;
+                        long elapsedHours = diff / hourInMillis;
+                        diff = diff % hourInMillis;
+                        long elapsedMinutes = diff / minuteInMillis;
+                        diff = diff % minuteInMillis;
+                        long elapsedSeconds = diff / secondInMillis;
+            %}  
+          <div class="span15">
+              <div class="well">
+              <h4>#{if e.isAction}
+            <span class="label">Action</span>
+            #{/if}
+            #{if e.isIdea}
+            <span class="label">Idée</span>
+            #{/if}
+            #{if e.isProject}
+            <span class="label">Projet</span>
+            #{/if}
+            #{if e.isMission}
+            <span class="label">Mission</span>
+            #{/if}
+            #{if e.isResult}
+            <span class="label">Résultat</span>
+            #{/if}
+            #{if e.isBug}
+            <span class="label">Bug</span>
+            #{/if}
+            #{if e.isChoice}
+            <span class="label">Choix</span>
+            #{/if}
+            #{if e.isATeam}
+            <span class="label">Team</span>
+            #{/if}
+            #{if e.isASimpleBud }
+            <span class="label">Bud</span>
+            #{/if}${e.budTitle}</h4><p> il y a #{if elapsedYears > 0}${elapsedYears}an#{/if}#{if elapsedDays > 0}${elapsedDays}jour/s #{/if}#{if elapsedHours > 0}${elapsedHours}h#{/if}#{if elapsedMinutes > 0}${elapsedMinutes} min #{/if}#{if elapsedMinutes < 1}${elapsedSeconds} sec #{/if}<a class="label" href="@{Application.show(e.id)}"> Voir ce bud »</a></p>                      
+          </div>
+          </div>
+          
+                    
+            
+            
+        #{/list}    
+        </div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

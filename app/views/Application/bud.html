@@ -1,0 +1,51 @@
+#{extends 'main.html' /}
+#{set title:'Bud' /}
+                        #{if flash.success}
+                        <div class="alert-message success">
+                        <a class="close" href="@{Application.index()}">×</a>
+                        <p><strong>Bien joué!</strong> longue vie à ce Bud</p>
+                        </div>
+                        #{/if}
+                        #{else}
+                        #{ifErrors}
+                        <div class="alert-message error">
+                        <a class="close" href="#">×</a>
+                        <p><strong>Oops!</strong> Ce bud manque d'information pour grandir</p>
+                        </div>
+                        #{/ifErrors}
+                        #{form @Application.newBud(), method:'POST', enctype:'multipart/form-data'}                   
+                        <section id="newbud">
+                            <div class="page-header">
+                                <h1>Mon bud</h1>
+                            </div>
+                                <div class="clear-fix">
+                                    <label for="requestTitle"><strong>Bud: </strong></label>
+                                    <div class="input">
+                                    <input class="xlarge" type="text" name="budTitle" size="60px" maxlength="40" value="${flash.budTitle}" class="required" />
+                                    </div>
+                                </div>
+                                 <input type="hidden" name="gid" value="1" />
+                                <div class="clear-fix">
+                                    <label for="content"><strong>Contenu: </strong></label>
+                                    <div class="input">
+                                        <textarea name="content" rows="15" cols="80" class="tinymce">${flash.content}</textarea>
+                                        <span class="help-block">
+                                            Lachez-vous !
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="clear-fix">
+                                    <label for="file"><strong>Fichier joint: </strong></label>
+                                    <div class="input">
+                                       <input class="input-file" type="file" name="file"/>
+                                    </div>
+                                </div>
+                                <div class="well">
+                                    <input class="btn primary" type="submit" /> <a class="btn default" href="@{Application.index()}">annuler</a>
+                                </div>
+                                
+                        
+                        #{/form}
+                        </section>
+                        #{/else}
+               

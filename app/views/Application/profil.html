@@ -1,0 +1,89 @@
+#{extends 'main.html' /}
+#{set title:'Qibud' /}
+#{if flash.success}
+    <div class="alert-message success">
+    <a class="close" href="#">×</a>
+    <p><strong>Bien joué!</strong> ${flash.success}</p>
+    </div>
+#{/if}
+#{if flash.error}
+    <div class="alert-message error">
+    <a class="close" href="#">×</a>
+    <p><strong>Oops =/</strong> ${flash.error}</p>
+    </div>
+#{/if}
+<!-- Main hero unit for a primary marketing message or call to action -->
+        <div class="hero-unit">
+          <h1>${userProfil.fullname}#{if userProfil.pictureUrl}<img src="${userProfil.pictureUrl}" />#{/if}</h1>
+          <p>${userProfil.headline}</p>
+          <p>Niveau ${userProfil.level}</p>
+          <p>Point d'expériences: ${userProfil.xp}xp <small>(points requis pour le prochain niveau : ${userProfil.xpToReach.round()}xp)</small></p>
+          <div id="chart" class=""></div>
+        </div>
+
+<script type="text/javascript">
+    var r = 800,
+    format = d3.format(",d"),
+    fill = d3.scale.category20c();
+
+var bubble = d3.layout.pack()
+    .sort(null)
+    .size([r, r]);
+
+var vis = d3.select("#chart").append("svg:svg")
+    .attr("width", r)
+    .attr("height", r)
+    .attr("class", "bubble");
+
+d3.json("@{Application.profilJSON(userProfil.id)}", function(json) {
+  var node = vis.selectAll("g.node")
+      .data(bubble.nodes(classes(json))
+      .filter(function(d) { return !d.children; }))
+    .enter().append("svg:g")
+      .attr("class", "node")
+      .attr("transform", function(d) { return "translate(" + d.x + "," + d.y + ")"; });
+
+  node.append("svg:title")
+      .text(function(d) { return d.className + ": " + format(d.value); });
+
+  node.append("svg:circle")
+      .attr("r", function(d) { return d.r; })
+      .style("fill", function(d) { return fill(d.packageName); });
+
+  node.append("svg:text")
+      .attr("text-anchor", "middle")
+      .attr("dy", ".3em")
+      .text(function(d) { return d.className.substring(0, d.r / 3); });
+});
+
+// Returns a flattened hierarchy containing all leaf nodes under the root.
+function classes(root) {
+  var classes = [];
+
+  function recurse(name, node) {
+    if (node.children) node.children.forEach(function(child) { recurse(node.name, child); });
+    else classes.push({packageName: name, className: node.name, value: node.size});
+  }
+
+  recurse(null, root);
+  return {children: classes};
+}
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

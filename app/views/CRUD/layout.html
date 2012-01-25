@@ -1,0 +1,19 @@
+#{extends 'admin.html' /}
+#{set 'moreStyles'}
+    <link rel="stylesheet" href="/public/stylesheets/bootstrap.min.css">
+#{/set}
+
+
+                #{if flash.success}
+                <div class="alert-message success">
+                        <a class="close" href="#">×</a>
+                        <p>${flash.success}</p>
+                    </div>
+                #{/if}
+                #{if flash.error || error}
+                    <div class="alert-message error">
+                        <a class="close" href="#">×</a>
+                        <p>${error ?: flash.error}</p>
+                    </div>
+                #{/if}
+                #{doLayout /}

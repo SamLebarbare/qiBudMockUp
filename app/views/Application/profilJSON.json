@@ -1,0 +1,20 @@
+{"name": "Mood",
+ "children": [
+    {
+     "name": "Creator",
+     "children": [
+      {"name": "Creatif", "size": ${creaScore}},
+      {"name": "Curieux", "size": ${curiusScore}},
+      {"name": "Organisateur", "size": ${orgaScore}}
+                ]
+    },
+    {
+     "name": "Actor",
+     "children": [  
+      {"name": "Realisateur", "size": ${reaScore}},
+      {"name": "Problem Solver", "size": ${psolvScore}},
+      {"name": "Project Manager", "size": ${pmScore}},
+      {"name": "Leadership", "size": ${leadScore}}
+                ]
+    }   ]
+  }

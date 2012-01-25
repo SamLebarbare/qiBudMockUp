@@ -1,0 +1,13 @@
+#{extends 'main.html' /}
+<h1>Invitations</h1>
+#{form @Application.sendInvite(b.id)}
+<p>Utilisateurs:</p>
+<select id="userlist" name="uids" multiple="multiple">
+    #{list items:users, as:'u'}
+        <option value="${u.id}">${u.fullname}</option>
+    #{/list}
+</select>
+<div class="well">
+<input class="btn primary" type="submit" value="Inviter" /><a class="btn default" href="@{Application.show(b.id)}">annuler</a>
+</div>
+#{/form}

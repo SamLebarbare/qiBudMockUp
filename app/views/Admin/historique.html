@@ -1,0 +1,13 @@
+#{extends 'admin.html' /}
+
+                    <h4>Historique</h4>
+                #{table allBuds, as: 'r'}
+                  #{column 'Titre'}
+                    ${r.budTitle}
+                  #{/column}
+                  #{column 'Createur'}
+                    ${r.creator.fullname}
+                  #{/column}
+                #{/table}
+
+

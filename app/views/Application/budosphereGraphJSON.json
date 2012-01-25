@@ -1,0 +1,15 @@
+{
+    "nodes":[
+          {"content":"La budosphere","nodeName":"Budosphere","id":0,"group":0},
+              #{list items:allBuds,as:'b'}    
+                  {"content":${b.budDetailsToJsonString()},"nodeName":${b.toJsonString()},"id":${b.id},"group":1}
+                  #{if !b_isLast},#{/if}
+              #{/list}
+      ],
+    "links":[
+              {"source":0, "target":0, "value":5},
+              #{list items:allBuds,as:'b'} 
+                {"source":${b_index},#{if b.father != null}"target":${b.father.id}#{/if}#{else}"target":0#{/else}, "value":5}
+                #{if !b_isLast},#{/if} 
+                #{/list}
+      ]}

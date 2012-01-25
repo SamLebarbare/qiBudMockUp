@@ -1,0 +1,51 @@
+#{extends 'admin.html' /}
+
+<h4>Graphique</h4>
+<script type="text/javascript+protovis">
+var buds = {
+      nodes:[
+      {nodeName:"Budosphere", group:10},
+      #{list items:allBuds,as:'b'}     
+      {nodeName:"${b.budTitle.noAccents()}", #{if b.isASimpleBud}group:1#{/if}#{else}group:8#{/else}}#{if !b_isLast},#{/if}                   	
+      #{/list} 
+      ],
+      links:[
+      {source:0,target:0, value:25},
+      #{list items:allBuds,as:'b'} 
+        {source:${b.id}, #{if b.father != null}target:${b.father.id}#{/if}#{else}target:0#{/else}, value:15}#{if !b_isLast},#{/if} 
+      #{/list}
+      ]
+  };
+  
+var w = 960,
+    h = 600,
+    colors = pv.Colors.category19();
+
+var vis = new pv.Panel()
+    .width(w)
+    .height(h)
+    .fillStyle("white")
+    .event("mousedown", pv.Behavior.pan())
+    .event("mousewheel", pv.Behavior.zoom());
+    
+
+var force = vis.add(pv.Layout.Force)
+    .nodes(buds.nodes)
+    .links(buds.links);
+
+force.link.add(pv.Line);
+
+force.node.add(pv.Dot)
+    .size(function(d) (d.linkDegree + 4) * Math.pow(this.scale, -1.5))
+    .fillStyle(function(d) d.fix ? "brown" : colors(d.group))
+    .strokeStyle(function() this.fillStyle().darker())
+    .lineWidth(1)
+    .title(function(d) d.nodeName)
+    .event("mousedown", pv.Behavior.drag())
+    .event("drag", force);
+
+vis.render();
+
+    </script>
+
+

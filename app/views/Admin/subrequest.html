@@ -1,0 +1,54 @@
+#{extends 'main.html' /}
+#{set title:'Nouvelle demande' /}
+<div id="main_secondary">
+            <div id="full_page">
+                <div class="full_top">
+                    <h4>Nouvelle demande ${group.groupName} sous ${father.requestTitle}</h4>
+                </div>
+                <div class="full_body">
+                    <div id="contact-wrapper">
+                        #{if flash.success}
+                           <p>
+                                <a href="@{Admin.index()}">Retour au service</a>
+                           </p>
+                           <p class="success">${flash.success}</p>
+                        #{/if}
+                        #{else}
+                        #{form @Admin.newSubRequest(father.id), method:'POST', enctype:'multipart/form-data', id:'contactform'}
+                                #{ifErrors}
+                                    <p class="error">
+                                        All fields are required!
+                                    </p>
+                                #{/ifErrors}
+                                <div>
+                                    <label for="requestTitle"><strong>Titre de la sous-demande (${father.requestTitle}): </strong></label>
+                                    <input type="text" name="requestTitle" size="60px" maxlength="40" value="${params.requestTitle}" value class="required" />
+                                </div>
+                                <div>
+                                    <label for="gid"><strong>Service:</strong></label>
+                                        #{select 'gid', items:groups, valueProperty:'id', labelProperty:'groupName', value:group.id}
+                                        #{/select}
+                                </div>
+                                <div>
+                                    <label for="content"><strong>Votre message: </strong></label>
+                                    <textarea name="content" value class="required">${params.content}</textarea>
+                                </div>
+                                <div>
+                                    <label for="file"><strong>Fichier joint: </strong></label>
+                                    <input type="file" name="file"/><br/>
+                                    <br/>
+                                </div>
+                                <div>
+                                    <input class="submit" type="submit" value="Envoyer" /><a href="@{Admin.index()}"> ou annuler</a>
+                                </div>
+                                
+                        
+                        #{/form}
+                        
+                        #{/else}
+                        </div>
+                        </div>
+                        <div class="full_bottom"><!--bottom design --></div>
+                      </div>
+                </div> 
+               

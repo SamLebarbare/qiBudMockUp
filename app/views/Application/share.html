@@ -1,0 +1,28 @@
+#{extends 'main.html' /}
+<section id="share">
+                            <div class="page-header">
+                                <h1>Partage <small>En cours de développement...</small></h1>
+                            </div>
+
+#{form @Application.sendShare(b.id)}
+<div class="clear-fix">
+<label for="userlist">Utilisateurs:</label>
+<select id="userlist" name="uids" multiple="multiple">
+    #{list items:users, as:'u'}
+        <option value="${u.id}">${u.fullname}</option>
+    #{/list}
+</select>
+</div>
+<div class="clear-fix">
+<label for="teamlist">Team:</label>
+<select id="teamlist" name="tids" multiple="multiple">
+    #{list items:teams, as:'t'}
+        <option value="${t.id}">${t.origin.budTitle}</option>
+    #{/list}
+</select>
+</div>
+<div class="well">
+<input class="btn primary" type="submit" value="Partager" /><a class="btn default" href="@{Application.show(b.id)}">annuler</a>
+</div>
+#{/form}
+</section>

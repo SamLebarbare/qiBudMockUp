@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="fr">
+    <head>
+        <meta charset="utf-8">
+        <title>QiBud</title>
+        <meta name="description" content="">
+        <meta name="author" content="">
+
+        <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+        <!--[if lt IE 9]>
+          <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+        <![endif]-->
+        <script type="text/javascript" src="/public/javascripts/gnode/util.js"></script>
+	<script type="text/javascript" src="/public/javascripts/gnode/core.js"></script>
+	<script type="text/javascript" src="/public/javascripts/gnode/proximity.js"></script>
+	<script type="text/javascript" src="/public/javascripts/gnode/cluster.js"></script>
+	<script type="text/javascript" src="/public/javascripts/gnode/layout.js"></script>
+	<script type="text/javascript" src="/public/javascripts/gnode/style.js"></script>
+        
+        <script type="text/javascript" src="/public/javascripts/protovis-r3.2.js"></script>
+        
+        <!-- Le styles -->
+        <link rel="stylesheet" href="/public/stylesheets/bootstrap.min.css">
+        <style type="text/css">
+      /* Override some defaults */
+      html, body {
+        background-color: #eee;
+      }
+      body {
+        padding-top: 40px; /* 40px to make the container go all the way to the bottom of the topbar */
+      }
+      .container > footer p {
+        text-align: center; /* center align it with the container */
+      }
+      .container {
+        width: 960px; /* downsize our container to make the content feel a bit tighter and more cohesive. NOTE: this removes two full columns from the grid, meaning you only go to 14 columns and not 16. */
+      }
+
+      /* The white background content wrapper */
+      .content {
+        background-color: #fff;
+        padding: 20px;
+        margin: 0 -20px; /* negative indent the amount of the padding to maintain the grid system */
+        -webkit-border-radius: 0 0 6px 6px;
+           -moz-border-radius: 0 0 6px 6px;
+                border-radius: 0 0 6px 6px;
+        -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.15);
+           -moz-box-shadow: 0 1px 2px rgba(0,0,0,.15);
+                box-shadow: 0 1px 2px rgba(0,0,0,.15);
+      }
+
+   
+
+      /* Styles you shouldn't keep as they are for displaying this base example only */
+      .content .span10,
+      .content .span4 {
+        min-height: 500px;
+      }
+      /* Give a quick and non-cross-browser friendly divider */
+      .content .span4 {
+        margin-left: 0;
+        padding-left: 19px;
+        border-left: 1px solid #eee;
+      }
+
+      .topbar .btn {
+        border: 0;
+      }
+
+    </style>
+
+        <!-- Le fav and touch icons -->
+        <link rel="shortcut icon" href="public/images/favicon.ico">
+    </head>
+
+    <body>
+        <div class="topbar">
+            <div class="topbar-inner">
+                <div class="container-fluid">
+                    <a class="brand" href="@{Application.index()}"><img src="/public/images/logo.png" height="20px"/></a>
+                    #{form @Application.search(),class:"pull-left", method:'POST',enctype:'multipart/form-data'}
+                    <input type="text" value="" name="title" />
+                    #{/form}
+                    <ul class="nav">
+                          <li><a href="@{Application.index()}">La budosphere</a></li>
+                          <li><a href="@{Admin.graphs()}">Bud Graph</a></li>
+                          #{secure.check 'superuser'}
+                          <li><a href="@{Admin.historique()}">Mode histoire</a></li>                      
+                          <li><a href="@{Users.list()}">Utilisateurs</a></li>
+                          <li><a href="@{Groups.list()}">Groupes</a></li>
+                          <li><a href="@{Buds.list()}">Buds</a></li>
+                          #{/secure.check}
+                    </ul>
+                    <p class="pull-right">Logged in as <a href="#">${user}</a></p>
+                </div>
+            </div>
+        </div>
+        <div class="container">
+            <div class="content">
+            #{doLayout /}
+            </div>
+            <footer>
+                <div class="container">
+                <p class="pull-right"><a href="#">Back to top</a></p>
+                <p class="pull-left"><a href="http://playframework.org"><img src="/public/images/play.png" /></a></p>
+                <p>
+                  Designed and built with all the love in the world <a href="http://twitter.com/qibud" target="_blank">@qibud</a> by <a href="http://twitter.com/s4mb4rb3ry" target="_blank">@s4mb4rb3ry</a>.<br>
+                  Licensed under the <a href="http://www.apache.org/licenses/LICENSE-2.0" target="_blank">Apache License v2.0</a>.
+                  Nectar brought to you by <a href="http://www.cloudbees.com" title="Go to CloudBees.com">CloudBees</a>
+                  
+                </p>
+                
+                
+              </div>
+
+            </footer>
+        </div>
+</body>
+</html>

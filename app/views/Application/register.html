@@ -1,0 +1,53 @@
+#{extends 'main.html' /}
+#{set title:'Home' /}
+<div class="hero-unit">
+    <h1>Bienvenue dans QiBud!</h1>
+</div>
+<section id="register">
+#{if flash.success}
+    <div class="alert-message success">
+    <a class="close" href="#">×</a>
+    <p><strong>Bien joué!</strong> ${flash.success}</p>
+    </div>
+#{/if}
+#{if flash.error}
+    <div class="alert-message error">
+    <a class="close" href="#">×</a>
+    <p><strong>Oops =/</strong> ${flash.error}</p>
+    </div>
+#{/if}
+
+    #{if user.mustRegister}
+
+    #{form @Application.updateUser(user.id)}
+
+    <h4>Quelques informations sur vous avant de commencer:</h4>
+    <div class="well">
+        <div class="clear-fix">
+            <div class="input">
+                <label><strong>Votre e-mail de contact:</strong></label>
+                <input class="xlarge" name="em" value="${user.email}" type="text"/>
+            </div>
+        </div>
+    </div>
+    <div class="well">
+        <div class="clear-fix">
+            <div class="input">
+                <label><strong>Votre prénom et nom:</strong></label>
+                <input  class="xlarge" name="fn" type="text"/>
+                <span class="help-block">
+                    Sera affiché sur vos publications ;)
+                </span>
+                <input class="btn primary" type="submit" value="Continuer">
+            </div>
+
+        </div>
+
+        
+
+    </div>
+
+    #{/form}
+
+#{/if}
+</section>

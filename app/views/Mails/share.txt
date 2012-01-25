@@ -1,0 +1,13 @@
+Bonjour ${viewer.fullname},
+
+Vous avez maintenant accès a cette demande :
+
+################################
+TITRE:${req.requestTitle}
+################################
+${req.content}
+################################
+
+Salutations,
+
+${user.fullname}

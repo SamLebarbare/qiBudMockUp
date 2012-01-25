@@ -1,0 +1,14 @@
+Bonjour ${r.creator.fullname},
+
+Votre demande CSR#${r.id} au service ${r.group.groupName} est passé au status : ${r.status}
+
+Rappel de la demande de base:
+################################
+TITRE:${r.requestTitle}
+################################
+${r.content}
+################################
+
+Salutations,
+
+${user.fullname}

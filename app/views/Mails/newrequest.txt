@@ -1,0 +1,7 @@
+Une nouvelle demande est arrivée au service ${r.group.groupName}
+
+################################
+TITRE:${r.requestTitle}
+################################
+${r.content}
+################################

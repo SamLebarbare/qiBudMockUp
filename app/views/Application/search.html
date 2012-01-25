@@ -1,0 +1,136 @@
+#{extends 'main.html' /}
+#{set title:'Home' /}
+#{list items:resultats, as:'r'}
+<div class="well">
+    #{if flash.success}
+    <div class="alert-message success">
+    <a class="close" href="@{Application.show(r.id)}">×</a>
+    <p><strong>Bien joué!</strong> ${flash.success}</p>
+    </div>
+#{/if}
+#{if flash.error}
+    <div class="alert-message error">
+    <a class="close" href="@{Application.show(r.id)}">×</a>
+    <p><strong>Oops =/</strong> ${flash.error}</p>
+    </div>
+#{/if}
+  <h6><a href="@{Application.show(r.id)}">${r.budTitle}</a> qi:${r.qi}
+        #{if r.isAction}
+        <span class="label">Action: ${r.action.status}</span>
+        #{/if}
+        #{if r.isIdea}
+        <span class="label">Idée</span>
+        #{/if}
+        #{if r.isBug}
+        <span class="label">Bug: ${r.bug.status}</span>
+        #{/if}
+        #{if r.isProject}
+        <span class="label">Projet: ${r.project.status}</span>
+        #{/if}
+        #{if r.isMission}
+        <span class="label">Mission: ${r.mission.status}</span>
+        #{/if}
+        #{if r.isResult}
+        <span class="label">Résultat: ${r.result.status}</span>
+        #{/if}
+        #{if r.isChoice}
+        <span class="label">Choix</span>
+        #{/if}
+        #{if r.isATeam}
+        <span class="label">Team</span>
+        #{/if}
+        #{if r.isASimpleBud }
+        <span class="label">Bud</span>
+        #{/if}
+        publié le ${r.createdAt.format('dd MMMM yy')}
+        </h6>
+    <div class="page-header">
+        
+        <ul class="breadcrumb">
+            <h6>Résumé:</h6>
+        #{if r.father}
+            <li><span class="divider"> Découle de : </li>
+            #{if r.father.isAction}
+            <li><a href="@{Application.show(r.father.id)}" class="label"  rel="twipsy" data-original-title="${r.father.budTitle}: ${r.father.action.status}">Action</a></li>
+            #{/if}
+            #{if r.father.isIdea}
+            <li><a class="label"  href="@{Application.show(r.father.id)} "rel="twipsy" data-original-title="${r.father.budTitle}">Idée</a></li>
+            #{/if}
+            #{if r.father.isBug}
+            <li><a class="label"  href="@{Application.show(r.father.id)} "rel="twipsy" data-original-title="${r.father.budTitle}: ${r.father.bug.status}">Bug</a></li>
+            #{/if}
+            #{if r.father.isProject}
+            <li><a class="label"  href="@{Application.show(r.father.id)} "rel="twipsy" data-original-title="${r.father.budTitle}: ${r.father.project.status}">Projet</a></li>
+            #{/if}
+            #{if r.father.isMission}
+            <li><a class="label"  href="@{Application.show(r.father.id)}" rel="twipsy" data-original-title="${r.father.budTitle}: ${r.father.mission.status}">Mission</a></li>
+            #{/if}
+            #{if r.father.isResult}
+            <li><a class="label"  href="@{Application.show(r.father.id)} "rel="twipsy" data-original-title="${r.father.budTitle}: ${r.father.result.status}">Résultat</a></li>
+            #{/if}
+            #{if r.father.isChoice}
+            <li><a class="label"  href="@{Application.show(r.father.id)} "rel="twipsy" data-original-title="${r.father.budTitle}">Choix</a></li>
+            #{/if}
+            #{if r.father.isATeam}
+            <li><a class="label"  href="@{Application.show(r.father.id)} "rel="twipsy" data-original-title="${r.father.budTitle}">Team</a></li>
+            #{/if}
+            #{if r.father.isASimpleBud}
+            <li><a class="label"  href="@{Application.show(r.father.id)}" rel="twipsy" data-original-title="${r.father.budTitle}">Bud</a></li>
+            #{/if}
+            
+        #{/if}
+        
+        
+
+        #{if r.subBuds}
+        
+        <li><span class="divider"> Contient: (</span></li>
+        #{list items:r.subBuds, as:'s'}
+            #{if s.isAction}
+            <li><a href="@{Application.show(s.id)}" class="label"  rel="twipsy" data-original-title="${s.budTitle}: ${s.action.status}">Action</a></li>
+            #{/if}
+            #{if s.isIdea}
+            <li><a class="label"  href="@{Application.show(s.id)} "rel="twipsy" data-original-title="${s.budTitle}">Idée</a></li>
+            #{/if}
+            #{if s.isProject}
+            <li><a class="label"  href="@{Application.show(s.id)} "rel="twipsy" data-original-title="${s.budTitle}: ${s.project.status}">Projet</a></li>
+            #{/if}
+            #{if s.isMission}
+            <li><a class="label"  href="@{Application.show(s.id)} "rel="twipsy" data-original-title="${s.budTitle}: ${s.mission.status}">Mission</a></li>
+            #{/if}
+            #{if s.isResult}
+            <li><a class="label" href="@{Application.show(s.id)} "rel="twipsy" data-original-title="${s.budTitle}: ${s.result.status}">Résultat</a></li>
+            #{/if}
+            #{if s.isBug}
+            <li><a class="label"  href="@{Application.show(s.id)} "rel="twipsy" data-original-title="${s.budTitle}: ${s.bug.status}">Bug</a></li>
+            #{/if}
+            #{if s.isChoice}
+            <li><a class="label"  href="@{Application.show(s.id)} "rel="twipsy" data-original-title="${s.budTitle}">Choix</a></li>
+            #{/if}
+            #{if s.isATeam}
+            <li><a class="label"  href="@{Application.show(s.id)} "rel="twipsy" data-original-title="${s.budTitle}">Team</a></li>
+            #{/if}
+            #{if s.isASimpleBud}
+            <li><a class="label"  href="@{Application.show(s.id)}" rel="twipsy" data-original-title="${s.budTitle}">Bud</a></li>
+            #{/if}
+        #{/list}
+        <li><span class="divider"> )</span></li>
+        #{/if}
+      </ul> 
+        
+    </div>
+</div>
+#{/list}
+ 
+
+
+    
+   
+
+
+
+
+
+
+
+

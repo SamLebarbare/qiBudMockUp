@@ -1,0 +1,53 @@
+#{extends 'main.html' /}
+#{if error!= ""}<span class="label important">${error}</span>#{/if}
+#{else}
+#{if cuser.emailServer!=null && cuser.emailUserName!=null && cuser.emailPassword !=null}
+<section id="mail2bud"> 
+    <div class="page-header">
+    <h1>Inbox <small>En cours de développement...</small></h1>
+</div>
+    
+    <h6>${newMsg} nouveaux messages</h6> 
+    #{list items:emails,as:'m'}
+    <p>De: ${m.from.raw()} Sujet: ${m.subject.raw()}</p>
+    #{form @Application.mail2budNew(m.subject,m.id)}
+    <input class="label" type="submit" value="budifier" />
+    #{/form}
+    #{/list}
+</section>
+#{/if}
+#{/else}
+#{form @Application.mail2budConfig()}
+<section id="mail2budconfig">
+<div class="page-header">
+    <h1>Config IMAP</h1>
+</div>
+    <div class="clear-fix">
+        <label for="requestTitle"><strong>Serveur: </strong></label>
+        <div class="input">
+        <input class="xlarge" type="text" name="server" size="60px" maxlength="40" value="${cuser.emailServer}" class="required" />
+        </div>
+    </div>
+    <div class="clear-fix">
+        <label for="requestTitle"><strong>Utilisateur: </strong></label>
+        <div class="input">
+        <input class="xlarge" type="text" name="userName" size="60px" maxlength="40" value="${cuser.emailUserName}" class="required" />
+        </div>
+    </div>
+    <div class="clear-fix">
+        <label for="requestTitle"><strong>Mot de passe: </strong></label>
+        <div class="input">
+        <input class="xlarge" type="password" name="password" size="60px" maxlength="40" value="${cuser.emailPassword}" class="required" />
+        </div>
+    </div>
+<br>
+<div class="well">    
+    <input class="btn primary" type="submit" value="Enregistrer" />#{if cuser.emailServer!=null && cuser.emailUserName!=null && cuser.emailPassword !=null}
+    #{form @Application.mail2budTest()}
+        <input class="btn primary" type="submit" value="Tester" />
+    #{/form}
+    #{/if}
+</div>    
+#{/form}
+</section>
+

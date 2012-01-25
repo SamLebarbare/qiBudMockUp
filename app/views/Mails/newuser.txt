@@ -1,0 +1,3 @@
+${user.login} c'est connecté pour la première fois.
+
+Il faut remplire les informations de comptes pour cette personne.

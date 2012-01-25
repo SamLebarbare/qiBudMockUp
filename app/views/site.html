@@ -1,0 +1,160 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html lang="fr">
+    <head>
+    <meta charset="utf-8">
+    <title>QiBud v1 Beta</title>
+    <meta name="description" content="Collaborative Engine">
+    <meta name="author" content="Samuel Loup">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <!-- Le styles -->
+    <link rel="stylesheet" href="/public/stylesheets/bootstrap.min.css" />
+    <script src="/public/javascripts/bootstrap-scrollspy.js"></script>
+    <style type="text/css">
+      /* Override some defaults */
+      html, body {
+        background-color: #eee;
+      }
+      body {
+        padding-top: 40px; /* 40px to make the container go all the way to the bottom of the topbar */
+      }
+      .container > footer p {
+        text-align: center; /* center align it with the container */
+      }
+      .container {
+        width: 960px; /* downsize our container to make the content feel a bit tighter and more cohesive. NOTE: this removes two full columns from the grid, meaning you only go to 14 columns and not 16. */
+      }
+
+      /* The white background content wrapper */
+      .content {
+        background-color: #fff;
+        padding: 20px;
+        margin: 0 -20px; /* negative indent the amount of the padding to maintain the grid system */
+        -webkit-border-radius: 0 0 6px 6px;
+           -moz-border-radius: 0 0 6px 6px;
+                border-radius: 0 0 6px 6px;
+        -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.15);
+           -moz-box-shadow: 0 1px 2px rgba(0,0,0,.15);
+                box-shadow: 0 1px 2px rgba(0,0,0,.15);
+      }
+
+      
+
+      /* Styles you shouldn't keep as they are for displaying this base example only */
+      .content .span10,
+      .content .span4 {
+        min-height: 500px;
+      }
+      /* Give a quick and non-cross-browser friendly divider */
+      .content .span4 {
+        margin-left: 0;
+        padding-left: 19px;
+        border-left: 1px solid #eee;
+      }
+
+      .topbar .btn {
+        border: 0;
+      }
+
+    </style>
+    <script type="text/javascript">
+        $('#topbar').scrollSpy();
+    </script>     
+    <!-- Le fav and touch icons -->
+  </head>
+
+  <body>
+
+    <div class="topbar" data-scrollspy="scrollspy">
+      <div class="fill">
+        <div class="container">
+          <a class="brand" href="#">About QiBud</a>
+          <ul class="nav">
+            <li><a href="http://www.qibud.com">Blog</a></li>
+            <li></li>
+          </ul>
+          <ul class="nav secondary-nav">
+                        <li>
+                          #{linkedin.button label:'Se connecter' /}
+                        </li>
+        </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="container">
+
+      <div class="content">
+         
+        <div class="row">
+            <div class="span4">
+            <img src="/public/images/logo_green.png" width="80%"/><br><br>
+            <b>QI</b><br>
+                <i>The energy to live that will make buds grow, exist and maybe deliver a result or disappear</i></p>
+            <p><b>BUD</b><br>
+                <i>small piece of something that can grow, blossom, become a branch and have new buds</i>
+                <br>               
+            <blockquote>"A bud is a philosophical representation of a human thought; the qi is the energy between thoughts,
+               humans, communities ..."
+               <small>Gilles R. QiBud Founder</small>
+            </blockquote>
+            </div>
+          <div class="span10">
+          <section id="invent">              
+              <div class="page-header">
+                <h1>Let’s invent something better ! <small></small></h1>                
+              </div>
+              
+            <h2>To correct bad email aspects</h2>
+            <p><ul>
+                <li>Several objects in one email</li>
+                <li>Adressed to the wrong person</li>
+                <li>A discussion hard to follow</li>
+                <li>Lose of context</li>
+                <li>People centric and object centered</li>
+                <li>Duplicated information</li>
+                <li>Hard to follow-up</li>
+
+            </ul></p>
+            <h2>While keeping good email aspects</h2>           
+            <p><ul>
+                <li>Simple to use (new-send-forward)</li>
+                <li>No limits & constraints in communication</li>
+                <li>quick & pragmatic tools</li>
+            </ul></p>  
+            <h2>To replace all the tools</h2>           
+            <p><ul>
+                <li>Used to manage unstructured information</li>
+            </ul></p> 
+            <h2>To put back the WHAT in the center</h2>           
+            <p><ul>
+                <li>Object = context</li>
+                <li>Object = reason to collaborate</li>
+                <li>Object = the business that matters</li>
+            </ul></p> 
+            <h2>To foster collaboration at all levels without a profund cultural change</h2>  
+        </section>
+          </div>
+        </div>
+      </div>
+        
+      <footer>
+                <div class="container">
+        <p class="pull-right"><a href="#">Back to top</a></p>
+        <p class="pull-left"><a href="http://playframework.org"><img src="/public/images/play.png" /></a></p>
+        <p>
+          Designed and built with all the love in the world <a href="http://twitter.com/qibud" target="_blank">@qibud</a> by <a href="http://twitter.com/s4mb4rb3ry" target="_blank">@s4mb4rb3ry</a>.<br>
+          Licensed under the <a href="http://www.apache.org/licenses/LICENSE-2.0" target="_blank">Apache License v2.0</a>.
+          Nectar brought to you by <a href="http://www.cloudbees.com" title="Go to CloudBees.com">CloudBees</a>
+        </p>
+         
+      </div>
+
+            </footer>
+
+    </div> <!-- /container -->
+</body></html>

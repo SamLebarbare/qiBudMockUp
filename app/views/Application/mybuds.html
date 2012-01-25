@@ -1,0 +1,99 @@
+#{extends 'main.html' /}
+#{set title:'Mes Buds' /}
+<section id="myBuds">
+    <div class="page-header">
+        <h1>Mes Buds</h1>
+    </div>
+        #{list items:myBuds, as:'r'}
+        <button data-controls-modal="modal-from-dom${r.id}" data-backdrop="true" data-keyboard="true" class="btn primary">${r.budTitle}</button>
+        <div id="modal-from-dom${r.id}" class="modal hide fade" style="display: none; ">
+            <div class="modal-header">
+              <a href="#" class="close">×</a>
+              <h3>BUD#${r.id} - ${r.budTitle} / ${r.group.groupName}</h3>
+            </div>
+            <div class="modal-body">          
+                    #{if r.father}
+                    <p>Demande parente:
+                    <a href="@{Application.show(r.father.id)}">${r.father.budTitle}</a></p>
+                    #{/if}
+                    #{if r.subBuds}
+                    <p>Sous-demande(s):
+                    #{list items:r.subBuds, as:'s'}
+                            <a href="@{Application.show(s.id)}">${s.budTitle}</a>
+                    #{/list}
+                    </p>
+                    #{/if}
+
+                    #{if users}<p>Suivis par : #{list items:users, as:'u'}<a href="#">${u.fullname}</a> #{/list}</p>#{/if}
+                    ${r.createdAt.format('dd MMM yy')} <a href="#">${r.creator.fullname}</a>
+                    <p>
+                            ${r.content.escape().nl2br()}
+                            #{if r.filepath}
+                            <br><a href="/public/shared/${r.filepath}"><img src="/public/images/theme/joint_icon.png" /></a>
+                            #{/if}
+                    </p>
+                    #{if r.comments}
+
+                        #{list items:r.comments, as:'c'}
+                        <div id="contact-wrapper">
+                                ${c.createdAt.format('dd MMM yy')} <a href="#">${c.creator.fullname}<img src="/public/images/theme/bud_icon.png" /></a>
+                                <p>
+                                ${c.title.escape().nl2br()}
+                                #{if c.filepath}
+                                    <br><a href="/public/shared/${c.filepath}"><img src="/public/images/theme/joint_icon.png" /></a>
+                                #{/if}
+                                </p>
+
+                        </div>
+                        #{/list}
+                    #{/if}
+                        <div id="contact-wrapper">
+                            #{form @Application.newComment(r.id), method:'POST', enctype:'multipart/form-data',class:'contactform'}
+                                #{ifErrors}
+                                    <p class="error">
+                                        All fields are required!
+                                    </p>
+                                #{/ifErrors}
+                                <p>
+                                    <label for="content">Votre commentaire : </label>
+                                    <textarea name="content" id="content">${params.content}</textarea>
+                                    <br>
+                                    <label for="content">Fichier joint : </label>
+                                    <input type="file" name="file"/>
+                                    <input type="submit" value="Commenter" />
+                                </p>
+                            #{/form}
+                        </div>
+            </div>
+            <div class="modal-footer">
+              <a href="@{Application.show(r.id)}" class="btn primary">Continuer</a>
+            </div>
+          </div>
+        #{/list}
+</section>
+<section id="myViewableBuds">
+    <div class="page-header">
+        <h1>Buds Visibles</h1>
+    </div>
+<div class="row">
+    #{if myViewableBuds}
+    <div class="span4">
+        
+                        #{list items:myViewableBuds, as:'p'}
+                        <a class="ended" href="@{Application.show(p.id)}">BUD#${p.id} - ${p.budTitle}</a><a href="@{Application.unShare(p.id)}"> Ne plus suivre</a>
+                        <br>
+                        #{/list}
+    </div>
+    #{/if}
+</div>
+</section>
+
+
+
+
+
+
+
+
+
+

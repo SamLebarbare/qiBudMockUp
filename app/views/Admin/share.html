@@ -1,0 +1,31 @@
+#{extends 'main.html' /}
+<div id="main_secondary">
+            <div id="full_page">
+                <div class="full_top">
+                    <h4></h4>
+                </div>
+                <div class="full_body">
+                        <div id="contact-wrapper">
+                            #{form @Admin.newShare(id)}
+                            <p>Par groupe de services:</p>
+                            <select id="test-1" name="uids" multiple="multiple" style="display: none; ">
+                                #{list items:groups, as:'g'}
+                                    <optgroup label="${g.groupName}">
+                                    #{list items:g.members, as:'u'}
+                                        <option value="${u.id}">${u.fullname}</option>
+                                    #{/list}
+                                    </optgroup>
+                                #{/list}
+                            </select>
+                            <p>Par utilisateurs:</p>
+                            <select id="test-2" name="uids" multiple="multiple" style="display: none; ">
+                                #{list items:users, as:'u'}
+                                    <option value="${u.id}">${u.fullname}</option>
+                                #{/list}
+                            </select>
+                            <input type="submit" value="Partager" />
+                            #{/form}
+                        </div>
+                </div>
+            </div>
+</div>

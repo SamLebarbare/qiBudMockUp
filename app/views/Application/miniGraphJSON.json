@@ -1,0 +1,42 @@
+{
+    "nodes":[
+          #{if r.father}
+            {"content":${r.father.budDetailsToJsonString() },"nodeName":${r.father.toJsonString() },"id":${r.father.id},"group":2},
+            {"content":${r.budDetailsToJsonString() },"nodeName":${r.toJsonString() },"id":${r.id},"group":0}
+            #{if r.subBuds},
+                #{list items:r.subBuds,as:'b'}               
+                    {"content":${b.budDetailsToJsonString() },"nodeName":${b.toJsonString()},"id":${b.id},"group":1}
+                    #{if !b_isLast},#{/if}
+                #{/list}
+            #{/if}
+         #{/if}
+         #{else}
+          {"content":${r.budDetailsToJsonString()},"nodeName":${r.toJsonString() },"id":${r.id},"group":0}
+              #{if r.subBuds},#{list items:r.subBuds,as:'b'}     
+                  {"content":${b.budDetailsToJsonString()},"nodeName":${b.toJsonString() },"id":${b.id},"group":1}
+                  #{if !b_isLast},#{/if}
+              #{/list}
+              #{/if}
+          #{/else}
+      ],
+    "links":[
+          #{if r.father}
+            {"source":0, "target":0, "value":5},
+            {"source":1, "target":0, "value":5}
+            #{if r.subBuds},
+                #{list items:r.subBuds,as:'b'} 
+                    {"source":${b_index + 1},"target":1, "value":5}
+                    #{if !b_isLast},#{/if} 
+                #{/list}
+            #{/if}
+          #{/if}
+          #{else}
+              {"source":0, "target":0, "value":5}
+              #{if r.subBuds},
+                #{list items:r.subBuds,as:'b'} 
+                {"source":${b_index},"target":0, "value":5}
+                #{if !b_isLast},#{/if} 
+                #{/list}
+              #{/if}
+          #{/else}
+      ]}

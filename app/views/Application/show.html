@@ -1,0 +1,421 @@
+#{extends 'main.html' /}
+#{if r.isProject}
+    #{if !r.project.assigned}
+      <div class="alert-message block-message success">
+        <p><strong>Projet libre</strong></p>
+        <div class="alert-actions">
+            <p>Jouer le chef de projet ?</p>
+          <a class="btn small" href="@{Application.takeProject(r.id)}">Accepter</a>
+          <p>Assigner le chef de projet ?</p>
+          <a class="btn small" href="@{Application.assign(r.id)}">Assigner</a>
+          <p>Partager ce projet ?</p>
+          <a  class="btn small" href="@{Application.share(r.id)}">Partager</a>
+        </div>
+      </div>
+    #{/if}
+#{/if}
+#{if r.isMission}
+    #{if !r.mission.assigned}
+      <div class="alert-message block-message success">
+        <p><strong>Mission libre</strong></p>
+        <div class="alert-actions">
+          <p>Entreprendre cette mission ?</p>
+          <a class="btn small" href="@{Application.takeMission(r.id)}">Accepter</a>
+          <p>Partager cette mission ?</p>
+          <a  class="btn small" href="@{Application.share(r.id)}">Partager</a>
+          <p>Assigner cette mission ?</p>
+          <a class="btn small" href="@{Application.assign(r.id)}">Assigner</a>        
+        </div>
+      </div>
+    #{/if}
+#{/if}
+#{if r.isAction}
+    #{if !r.action.assigned}
+      <div class="alert-message block-message success">
+        <p><strong>Action libre</strong></p>
+        <div class="alert-actions">
+          <p>Entreprendre cette action ?</p>
+          <a class="btn small" href="@{Application.takeAction(r.id)}">Accepter</a>
+          <p>Partager cette action ?</p>
+          <a  class="btn small" href="@{Application.share(r.id)}">Partager</a>
+          <p>Assigner cette action ?</p>
+          <a class="btn small" href="@{Application.assign(r.id)}">Assigner</a>          
+        </div>
+      </div>
+    #{/if}
+#{/if}
+#{if r.isBug}
+    #{if !r.bug.assigned}
+      <div class="alert-message block-message success">
+        <p><strong>Bug libre</strong></p>
+        <div class="alert-actions">
+            <p>Résoudre ce bug ?</p>
+          <a class="btn small" href="@{Application.takeBug(r.id)}">Accepter</a>
+          <p>Partager ce bug ?</p>
+          <a  class="btn small" href="@{Application.share(r.id)}">Partager</a>
+          <p>Assigner ce bug ?</p>
+          <a class="btn small" href="@{Application.assign(r.id)}">Assigner</a> 
+        </div>
+      </div>
+    #{/if}
+#{/if}
+#{if r.isResult}
+    #{if !r.result.define}
+        #{if !r.result.assigned}
+
+              <div class="alert-message block-message success">
+                <p><strong>Résultat</strong></p>
+                <div class="alert-actions">
+                    <p>Votre jugement?</p>
+                  <a class="btn small" href="@{Application.successfullResult(r.id)}">Un succès</a><a class="btn small" href="@{Application.failedResult(r.id)}">C'est raté</a>
+                </div>
+              </div>
+         #{/if} 
+         #{else}
+            #{if r.result.actor == currentuser}
+                    <div class="alert-message block-message success">
+                    <p><strong>Résultat</strong></p>
+                    <div class="alert-actions">
+                        <p>Votre jugement?</p>
+                      <a class="btn small" href="@{Application.successfullResult(r.id)}">Un succès</a><a class="btn small" href="@{Application.failedResult(r.id)}">C'est raté</a>
+                    </div>
+                  </div>
+            #{/if}
+         #{/else}
+    #{/if}     
+#{/if}
+#{if flash.success}
+    <div class="alert-message success">
+    <a class="close" href="@{Application.show(r.id)}">×</a>
+    <p><strong>Bien joué!</strong> ${flash.success}</p>
+    </div>
+#{/if}
+#{if flash.error}
+    <div class="alert-message error">
+    <a class="close" href="@{Application.show(r.id)}">×</a>
+    <p><strong>Oops =/</strong> ${flash.error}</p>
+    </div>
+#{/if}
+<section id="buds">
+    <div class="page-header">
+        
+    <ul class="tabs">
+        <li class="dropdown" data-dropdown="dropdown">
+          <a href="#" class="dropdown-toggle">Bud it!</a>
+          <ul class="dropdown-menu">
+            <li><a  href="@{Application.subbud(r.id)}">Ajouter un bud</a></li>
+            <li><a  href="@{Application.putInMyWallet(r.id)}">Mettre ce bud dans mon porte-bud</a></li>            
+            <li class="divider"></li>
+            <li><a href="@{Application.addBug(r.id)}">Ajouter un bug!</a></li>
+            <li><a href="@{Application.addIdea(r.id)}">Ajouter une idée!</a></li>
+            <li class="divider"></li>
+            <li><a href="@{Application.addProject(r.id)}">Ajouter un projet!</a></li>
+            <li><a href="@{Application.addMission(r.id)}">Ajouter une mission!</a></li>
+            <li class="divider"></li>
+            <li><a href="@{Application.addAction(r.id)}">Ajouter une action!</a></li>
+            <li><a href="@{Application.addResult(r.id)}">Ajouter un résultat!</a></li>
+            <li><a href="@{Application.addChoice(r.id)}">Ajouter un choix!</a></li>
+            <li class="divider"></li>
+            <li><a href="@{Application.addTeam(r.id)}">Ajouter une Team!</a></li>
+          </ul>
+        </li> 
+        <li class="dropdown" data-dropdown="dropdown">
+          <a href="#" class="dropdown-toggle">Evolve it!</a>
+          <ul class="dropdown-menu">
+            <li><a href="@{Application.morphInBug(r.id)}">Evolue en bug!</a></li>
+            <li><a href="@{Application.morphInIdea(r.id)}">Evolue en idée!</a></li>
+            <li class="divider"></li>
+            <li><a href="@{Application.morphInProject(r.id)}">Evolue en projet!</a></li>
+            <li><a href="@{Application.morphInMission(r.id)}">Evolue en mission!</a></li>
+            <li class="divider"></li>
+            <li><a href="@{Application.morphInAction(r.id)}">Evolue en action!</a></li>
+            <li><a href="@{Application.morphInResult(r.id)}">Evolue en résultat!</a></li>
+            <li><a href="@{Application.morphInChoice(r.id)}">Evolue en choix!</a></li>
+            <li class="divider"></li>
+            <li><a href="@{Application.morphInTeam(r.id)}">C'est une Team!</a></li>
+            <li><a href="@{Application.morphInBud(r.id)}">Redeviens bud</a></li>
+          </ul>
+        </li>
+         <li class="dropdown" data-dropdown="dropdown">
+          #{if flash.success}
+            #{if flash.get("budtype") == "team"}
+            <a href="#" class="dropdown-toggle"><span class="label success">new</span> Share it!</a>
+            #{/if}
+            #{else}
+            <a href="#" class="dropdown-toggle">Share it!</a>
+            #{/else}
+          #{/if}
+          #{else}
+          <a href="#" class="dropdown-toggle">Share it!</a>
+          #{/else}
+          <ul class="dropdown-menu">            
+            <li><a  href="@{Application.share(r.id)}">Partager</a></li>
+            #{if r.isAction || r.isBug || r.isMission || r.isProject || r.isResult}
+            <li><a href="@{Application.assign(r.id)}">Assigner</a></li>
+            #{/if}
+            #{if r.isATeam}
+            <li class="divider"></li>
+            <li><a href="#">Team:</a></li>
+            <li><a href="@{Application.invite(r.id)}">Inviter les membres</a></li>
+            #{/if}
+            #{if users}  
+            <li class="divider"></li>
+            <li><a href="#">Qui regarde ce bud :</a></li>
+            #{list items:users, as:'u'}
+            <li><a href="#">${u.fullname}</a></li>
+            #{/list}
+            #{/if}
+          </ul>
+        </li>
+        
+        
+        
+
+    </ul> 
+        <ul class="breadcrumb">
+            <h6>#{if r.creator==r.actor} Createur&amp;acteur : <a href="@{Application.profil(r.creator.id)}">${r.creator.fullname}</a>#{/if}#{else}Createur : <a href="@{Application.profil(r.creator.id)}">${r.creator.fullname}</a> #{if r.actor}Acteur:<a href="@{Application.profil(r.actor.id)}">${r.actor.fullname}</a>#{/if}#{/else}</h6>
+        #{if r.father}
+            <li><span class="divider"> Découle de : </li>
+            #{if r.father.isAction}
+            <li><a href="@{Application.show(r.father.id)}" class="label"  rel="twipsy" data-original-title="${r.father.budTitle}: ${r.father.action.status}">Action</a></li>
+            #{/if}
+            #{if r.father.isIdea}
+            <li><a class="label"  href="@{Application.show(r.father.id)} "rel="twipsy" data-original-title="${r.father.budTitle}">Idée</a></li>
+            #{/if}
+            #{if r.father.isBug}
+            <li><a class="label"  href="@{Application.show(r.father.id)} "rel="twipsy" data-original-title="${r.father.budTitle}: ${r.father.bug.status}">Bug</a></li>
+            #{/if}
+            #{if r.father.isProject}
+            <li><a class="label"  href="@{Application.show(r.father.id)} "rel="twipsy" data-original-title="${r.father.budTitle}: ${r.father.project.status}">Projet</a></li>
+            #{/if}
+            #{if r.father.isMission}
+            <li><a class="label"  href="@{Application.show(r.father.id)}" rel="twipsy" data-original-title="${r.father.budTitle}: ${r.father.mission.status}">Mission</a></li>
+            #{/if}
+            #{if r.father.isResult}
+            <li><a class="label"  href="@{Application.show(r.father.id)} "rel="twipsy" data-original-title="${r.father.budTitle}: ${r.father.result.status}">Résultat</a></li>
+            #{/if}
+            #{if r.father.isChoice}
+            <li><a class="label"  href="@{Application.show(r.father.id)} "rel="twipsy" data-original-title="${r.father.budTitle}">Choix</a></li>
+            #{/if}
+            #{if r.father.isATeam}
+            <li><a class="label"  href="@{Application.show(r.father.id)} "rel="twipsy" data-original-title="${r.father.budTitle}">Team</a></li>
+            #{/if}
+            #{if r.father.isASimpleBud}
+            <li><a class="label"  href="@{Application.show(r.father.id)}" rel="twipsy" data-original-title="${r.father.budTitle}">Bud</a></li>
+            #{/if}
+            
+        #{/if}
+        
+        
+
+        #{if r.subBuds}
+        
+        <li><span class="divider"> Contient: (</span></li>
+        #{list items:r.subBuds, as:'s'}
+            #{if s.isAction}
+            <li><a href="@{Application.show(s.id)}" class="label"  rel="twipsy" data-original-title="${s.budTitle}: ${s.action.status}">Action</a></li>
+            #{/if}
+            #{if s.isIdea}
+            <li><a class="label"  href="@{Application.show(s.id)} "rel="twipsy" data-original-title="${s.budTitle}">Idée</a></li>
+            #{/if}
+            #{if s.isProject}
+            <li><a class="label"  href="@{Application.show(s.id)} "rel="twipsy" data-original-title="${s.budTitle}: ${s.project.status}">Projet</a></li>
+            #{/if}
+            #{if s.isMission}
+            <li><a class="label"  href="@{Application.show(s.id)} "rel="twipsy" data-original-title="${s.budTitle}: ${s.mission.status}">Mission</a></li>
+            #{/if}
+            #{if s.isResult}
+            <li><a class="label" href="@{Application.show(s.id)} "rel="twipsy" data-original-title="${s.budTitle}: ${s.result.status}">Résultat</a></li>
+            #{/if}
+            #{if s.isBug}
+            <li><a class="label"  href="@{Application.show(s.id)} "rel="twipsy" data-original-title="${s.budTitle}: ${s.bug.status}">Bug</a></li>
+            #{/if}
+            #{if s.isChoice}
+            <li><a class="label"  href="@{Application.show(s.id)} "rel="twipsy" data-original-title="${s.budTitle}">Choix</a></li>
+            #{/if}
+            #{if s.isATeam}
+            <li><a class="label"  href="@{Application.show(s.id)} "rel="twipsy" data-original-title="${s.budTitle}">Team</a></li>
+            #{/if}
+            #{if s.isASimpleBud}
+            <li><a class="label"  href="@{Application.show(s.id)}" rel="twipsy" data-original-title="${s.budTitle}">Bud</a></li>
+            #{/if}
+        #{/list}
+        <li><span class="divider"> )</span></li>
+        #{/if}
+      </ul>      
+        <h6>qi:${r.qi}
+        #{if r.isAction}
+        <span class="label">Action: ${r.action.status}</span>
+        #{/if}
+        #{if r.isIdea}
+        <span class="label">Idée</span>
+        #{/if}
+        #{if r.isBug}
+        <span class="label">Bug: ${r.bug.status}</span>
+        #{/if}
+        #{if r.isProject}
+        <span class="label">Projet: ${r.project.status}</span>
+        #{/if}
+        #{if r.isMission}
+        <span class="label">Mission: ${r.mission.status}</span>
+        #{/if}
+        #{if r.isResult}
+        <span class="label">Résultat: ${r.result.status}</span>
+        #{/if}
+        #{if r.isChoice}
+        <span class="label">Choix</span>
+        #{/if}
+        #{if r.isATeam}
+        <span class="label">Team</span>
+        #{/if}
+        #{if r.isASimpleBud }
+        <span class="label">Bud</span>
+        #{/if}
+        publié le ${r.createdAt.format('dd MMMM yy')}#{if r.creator == currentuser}<a class="label" href="@{Application.edit(r.id)}">editer</a>#{/if}
+        </h6>
+    </div>
+    <div id="chart" class=""></div>
+    <script type="text/javascript">
+
+    //.event("click", function(d) self.location = "show?id="+d.id);
+  
+ var w = 960,
+      h = 100;
+      fill = d3.scale.category20();
+  
+  var vis = d3.select("#chart").append("svg:svg")
+      .attr("width", w)
+      .attr("height", h);
+ d3.json("@{Application.miniGraphJSON(r.id)}", function(json) { 
+   var force = d3.layout.force()
+       .charge(-120)
+       .linkDistance(30)
+       .nodes(json.nodes)
+       .links(json.links)
+       .size([w, h])
+       .start();
+ 
+   var link = vis.selectAll("line.link")
+       .data(json.links)
+       .enter().append("svg:line")
+       .style("stroke","black")
+       .attr("x1", function(d) { return d.source.x; })
+       .attr("y1", function(d) { return d.source.y; })
+       .attr("x2", function(d) { return d.target.x; })
+       .attr("y2", function(d) { return d.target.y; });
+ 
+   var node = vis.selectAll("circle.node")
+       .data(json.nodes)
+     .enter().append("svg:circle")
+       .attr("cx", function(d) { return d.x; })
+       .attr("cy", function(d) { return d.y; })
+       .attr("r", 8)
+       .attr("rel","popover")
+       .attr("data-content",function(d) { return d.content; })
+       .attr("data-original-title",function(d) { return d.nodeName; })
+       .style("fill", function(d) { return fill(d.group); })
+       .call(force.drag);
+ 
+   
+   node.on("click",function(d) { self.location = "show?id="+d.id; });
+   
+   force.on("tick", function() {
+     link.attr("x1", function(d) { return d.source.x; })
+         .attr("y1", function(d) { return d.source.y; })
+         .attr("x2", function(d) { return d.target.x; })
+         .attr("y2", function(d) { return d.target.y; });
+ 
+     node.attr("cx", function(d) { return d.x; })
+         .attr("cy", function(d) { return d.y; });
+         
+         
+    });   
+   
+ });   
+ </script>
+ <script type="text/javascript">
+            $(function () {
+              $("circle[rel=popover]")
+                .popover({
+                  live: true,
+                  animate: false,
+                  html: true,
+                  placement: "above"
+                })
+                
+            })
+          </script>
+</section>
+
+
+<div class="hero-unit">
+    <h1>${r.budTitle}</h1>
+    <p>${r.content.raw()}</p>
+    #{if r.filepath}
+    <br><a href="/public/shared/${r.filepath}"><img src="/public/images/theme/joint_icon.png" /></a>
+    #{/if}
+</div>
+<section id="comments">
+    <div class="page-header">
+        <h3>Commentaires</h3>
+    </div>
+#{list items:r.comments, as:'c'}
+%{
+                    Date now = new Date();
+                    long l1 = now.getTime();
+                    long l2 = c.createdAt.getTime();
+                    long diff = l1 - l2;
+                    long secondInMillis = 1000;
+                    long minuteInMillis = secondInMillis * 60;
+                    long hourInMillis = minuteInMillis * 60;
+                    long dayInMillis = hourInMillis * 24;
+                    long yearInMillis = dayInMillis * 365;
+                    long elapsedYears = diff / yearInMillis;
+                    diff = diff % yearInMillis;
+                    long elapsedDays = diff / dayInMillis;
+                    diff = diff % dayInMillis;
+                    long elapsedHours = diff / hourInMillis;
+                    diff = diff % hourInMillis;
+                    long elapsedMinutes = diff / minuteInMillis;
+                    diff = diff % minuteInMillis;
+                    long elapsedSeconds = diff / secondInMillis;
+        %}
+<h5><a href="@{Application.profil(c.creator.id)}"  rel="twipsy" data-original-title="${c.creator.email}">${c.creator.fullname}: </a></h5>
+<div class="well">   
+    <h5>${c.title.escape().nl2br()}</h5>
+    <h6>il y a #{if elapsedYears > 0}${elapsedYears}an#{/if}#{if elapsedDays > 0}${elapsedDays}jour/s #{/if}#{if elapsedHours > 0}${elapsedHours}h#{/if}#{if elapsedMinutes > 0}${elapsedMinutes} min #{/if}#{if elapsedMinutes < 1}${elapsedSeconds} sec#{/if} <a href="@{Application.subBudFromComment(r.id,c.creator.id,c.title)}"  class="label">budifier</a></h6>
+</div>
+#{/list}
+<script>
+            $(function () {
+              $("a[rel=twipsy]").twipsy({
+                live: true
+              })
+            })
+ </script>
+ #{form @Application.newComment(r.id), method:'POST', enctype:'multipart/form-data'}
+    #{ifErrors}
+    <p class="error">
+        All fields are required!
+    </p>
+    #{/ifErrors}
+        <div class="well">
+            <label for="content">Votre commentaire : </label>
+            <div class="input">
+                <textarea class="xxlarge" rows="3" name="content" id="content">${params.content}</textarea>
+            </div>
+            <label for="content">Fichier joint : </label>
+            <div class="input">
+                <input type="file" name="file"/>
+            </div>
+            <div class="input">
+            <input class="btn large primary" type="submit" value="Commenter" />
+            </div>
+        </div>
+    #{/form}
+</section>
+
+
+
+
+   

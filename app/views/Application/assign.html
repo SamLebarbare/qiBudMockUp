@@ -1,0 +1,13 @@
+#{extends 'main.html' /}
+<h1>Assignation</h1>
+#{form @Application.assignTo(b.id)}
+<p>Utilisateurs:</p>
+<select id="userlist" name="uid">
+    #{list items:users, as:'u'}
+        <option value="${u.id}">${u.fullname}</option>
+    #{/list}
+</select>
+<div class="well">
+<input class="btn primary" type="submit" value="Assigner" /><a class="btn default" href="@{Application.show(b.id)}">annuler</a>
+</div>
+#{/form}
