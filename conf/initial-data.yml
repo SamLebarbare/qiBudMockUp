@@ -1,7 +1,4 @@
-
-
-#CORPOSPHERE GROUPS
-
+#Budosphere
 Group(it):
     groupName:      Budosphere
     iconpath:       sphere.png

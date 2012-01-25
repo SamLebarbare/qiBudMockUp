@@ -1,8 +1,8 @@
-/qibud/public/shared
-/qibud/tmp
-/qibud/lib
-/qibud/test-result
-/qibud/logs
-/qibud/modules
-/qibud/nbproject
+/public/shared
+/tmp
+/lib
+/test-result
+/logs
+/modules
+/nbproject
 
